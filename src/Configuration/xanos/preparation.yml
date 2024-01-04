@@ -1,0 +1,113 @@
+---
+title: Preparations 
+description: Doing the obvious stuff before getting into the meats of Windows
+privilege: TrustedInstaller
+actions:
+
+- !registryValue: {path: 'HKLM\SOFTWARE\Policies\Microsoft\Windows\DriverSearching', value: 'DriverUpdateWizardWuSearchEnabled', data: '0', type: REG_DWORD}
+
+- !cmd:
+  exeDir: true
+  command: 'taskkill /f /im explorer.exe'
+
+- !writeStatus: {status: 'Installing...'}
+- !powerShell:
+  command: 'Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 10072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))'
+  weight: 100
+
+# Browser=========================================================================
+- !writeStatus: {status: 'Installing Firefox' option: 'browser-firefox'}
+- !powerShell:
+  command: 'choco install firefox /NoDesktopShortcut /NoMaintenanceService /RemoveDistributionDir'
+  weight: 100
+  option: 'browser-firefox'
+
+- !writeStatus: {status: 'Installing Otter' option: 'browser-otter'}
+- !powerShell:
+  command: 'choco install otter-browser'
+  weight: 100
+  option: 'browser-otter'
+
+- !writeStatus: {status: 'Installing Chrome' option: 'browser-chrome'}
+- !powerShell:
+  command: 'choco install googlechrome'
+  weight: 100
+  option: 'browser-chrome'
+#================================================================================
+
+#================================================================================
+- !writeStatus: {status: 'Installing 7Zip'}
+- !powerShell:
+  command: 'choco install 7zip'
+  weight: 100
+
+- !writeStatus: {status: 'Installing vcredist'}
+- !powerShell:
+  command: 'choco install vcredist140'
+  weight: 100
+#================================================================================
+
+#================================================================================
+- !writeStatus: {status: 'Installing VLC'}
+- !powerShell:
+  command: 'choco install vlc'
+  weight: 100
+
+- !writeStatus: {status: 'Installing nomacs'}
+- !powerShell:
+  command: 'choco install nomacs'
+  weight: 100
+#================================================================================
+
+#================================================================================
+- !writeStatus: {status: 'Installing Terminal'}
+- !powerShell:
+  command: 'choco install microsoft-windows-terminal'
+  weight: 100
+
+- !writeStatus: {status: 'Installing PowerShell'}
+- !powerShell:
+  command: 'choco install powershell-core --install-arguments='"DISABLE_TELEMETRY"''
+  weight: 100
+#================================================================================
+
+# IDE=============================================================================
+- !writeStatus: {status: 'Installing VSCode' option: 'dev-vscode'}
+- !powerShell:
+  command: 'choco install vscode /NoDesktopIcon /NoContextMenuFolders /NoContextMenuFiles /NoQuicklaunchIcon'
+  weight: 100
+  option: 'dev-vscode'
+
+- !writeStatus: {status: 'Installing VSCodium' option: 'dev-vscodium'}
+- !powerShell:
+  command: 'choco install vscodium /NoDesktopIcon /NoContextMenuFolders /NoContextMenuFiles /NoQuicklaunchIcon'
+  weight: 100
+  option: 'dev-vscodium'
+
+- !writeStatus: {status: 'Installing Sublime Text 3' option: 'dev-sublime3'}
+- !powerShell:
+  command: 'choco install sublimetext3'
+  weight: 100
+  option: 'dev-sublime3'
+
+- !writeStatus: {status: 'Installing Sublime Text 4' option: 'dev-sublime4'}
+- !powerShell:
+  command: 'choco install sublimetext4'
+  weight: 100
+  option: 'dev-sublime4'
+# ================================================================================
+
+- !writeStatus: {status: 'Shift Right Click Context Menu...'} # WIP
+
+- !writeStatus: {status: 'Start Menu...'} # WIP
+
+- !writeStatus: {status: 'Uninstalling the obvious'}
+# PowerShell > "Get-WindowsOptionalFeature -Online | FT"
+- !run: {exe: 'DISM.exe', args: '/Online /Disable-Feature /FeatureName:"Internet-Explorer-Optional-amd64" /NoRestart', weight: 100, builds: [ '!>=22000' ]} # Got this from Atlas
+- !run: {exe: 'DISM.exe', args: '/Online /Disable-Feature /FeatureName:"Printing-Foundation-Features" /NoRestart', weight: 100}
+- !run: {exe: 'DISM.exe', args: '/Online /Disable-Feature /FeatureName:"Printing-Foundation-InternetPrinting-Client" /NoRestart', weight: 100}
+- !run: {exe: 'DISM.exe', args: '/Online /Disable-Feature /FeatureName:"Printing-PrintToPDFServices-Features" /NoRestart', weight: 100}
+- !run: {exe: 'DISM.exe', args: '/Online /Disable-Feature /FeatureName:"Printing-XPSServices-Features" /NoRestart', weight: 100}
+- !run: {exe: 'DISM.exe', args: '/Online /Enable-Feature /FeatureName:"DirectPlay" /NoRestart /All', weight: 100}
+- !run: {exe: 'DISM.exe', args: '/Online /Disable-Feature /FeatureName:"XPS.Viewer~~~~0.0.1.0" /NoRestart', weight: 100} # --------------------------- WIP
+
