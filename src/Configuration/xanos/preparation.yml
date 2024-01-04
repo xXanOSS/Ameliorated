@@ -71,32 +71,6 @@ actions:
   weight: 100
 #================================================================================
 
-# IDE=============================================================================
-- !writeStatus: {status: 'Installing VSCode' option: 'dev-vscode'}
-- !powerShell:
-  command: 'choco install vscode /NoDesktopIcon /NoContextMenuFolders /NoContextMenuFiles /NoQuicklaunchIcon'
-  weight: 100
-  option: 'dev-vscode'
-
-- !writeStatus: {status: 'Installing VSCodium' option: 'dev-vscodium'}
-- !powerShell:
-  command: 'choco install vscodium /NoDesktopIcon /NoContextMenuFolders /NoContextMenuFiles /NoQuicklaunchIcon'
-  weight: 100
-  option: 'dev-vscodium'
-
-- !writeStatus: {status: 'Installing Sublime Text 3' option: 'dev-sublime3'}
-- !powerShell:
-  command: 'choco install sublimetext3'
-  weight: 100
-  option: 'dev-sublime3'
-
-- !writeStatus: {status: 'Installing Sublime Text 4' option: 'dev-sublime4'}
-- !powerShell:
-  command: 'choco install sublimetext4'
-  weight: 100
-  option: 'dev-sublime4'
-# ================================================================================
-
 - !writeStatus: {status: 'Shift Right Click Context Menu...'} # WIP
 
 - !writeStatus: {status: 'Start Menu...'} # WIP
